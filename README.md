@@ -1,11 +1,121 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# FRIGOHACKS
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+Hecho con Laravel 11
+<p align=""><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="200" alt="Laravel Logo"></a> 
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+
+
+# Sobre el proyecto
+
+FrigoHacks es un proyecto nacido de la necesidad de gestionar los recursos de la nevera eficeintemente. 
+
+FrigoHacks esta compuesto de 3 cosas:
+- Un sistema de gestión de nevera en un servidor web con una API REST y una interfaz web.
+- Una aplicación móvil que se conecta a la API REST para gestionar la nevera.
+- Un sistema de autenticacion fisible con una ESP32, un lector RFID y un pinpad.
+
+
+# Tecnologías
+- Laravel 11
+- VueJS
+- React
+- TailwindCSS
+- Arduino
+
+# Instalación
+- Clonar el repositorio con git
+- Instalar las dependencias con composer `composer install`
+- Copia el archivo .env.example a .env y modifica las variables de entorno `cp .env.example .env`
+- Modifica e introduce la ip de tu lector RFID en el archivo .env en `ESP32_IP=<Tu_IP>`
+- Modifica los datos de la base de datos en el archivo .env para que coincidan con tu base de datos
+- Migrar la base de datos con `php artisan migrate`
+- Instala las dependencias de node `npm install` (Puedes usar bun, yarn o cualquier otro gestor de paquetes)
+- Genera las paginas con `npm run build`
+
+
+# Endpoints para la App de Gestión de Nevera
+
+## Autenticación
+
+| Método | Endpoint | Descripción | Parámetros |
+|--------|---------|-------------|------------|
+| `POST` | `/login` | Iniciar sesión | `{ email, password }` |
+| `POST` | `/logout` | Cerrar sesión | `{}` |
+
+## Usuarios
+
+| Método | Endpoint | Descripción | Parámetros |
+|--------|---------|-------------|------------|
+| `POST` | `/users` | Crear usuario | `{ name, email, UUID, password }` |
+| `GET` | `/users/{id}` | Obtener información de un usuario | `{ id }` |
+| `PUT` | `/users/{id}` | Actualizar datos de usuario | `{ name, email, UUID, password }` |
+| `DELETE` | `/users/{id}` | Eliminar usuario | `{ id }` |
+| `GET` | `/users/{id}/balance` | Ver saldo de un usuario | `{ id }` |
+| `GET` | `/users/balances` | Ver saldo de todos los usuarios | `{}` |
+| `GET` | `/users/{id}/transactions` | Ver historial de transacciones | `{ id }` |
+
+## Gestión de Saldo
+
+| Método | Endpoint | Descripción | Parámetros |
+|--------|---------|-------------|------------|
+| `POST` | `/users/{id}/balance/add` | Agregar dinero a un usuario | `{ id, amount }` |
+| `POST` | `/users/{id}/balance/subtract` | Eliminar dinero de un usuario | `{ id, amount }` |
+
+## Productos
+
+| Método | Endpoint | Descripción | Parámetros |
+|--------|---------|-------------|------------|
+| `POST` | `/products` | Agregar producto | `{ name, quantity, price }` |
+| `DELETE` | `/products/{id}` | Eliminar producto | `{ id }` |
+| `PATCH` | `/products/{id}/quantity` | Modificar cantidad de producto | `{ id, quantity }` |
+| `PATCH` | `/products/{id}/price` | Modificar precio del producto | `{ id, price }` |
+| `PATCH` | `/products/{id}/restock` | Agregar stock de un producto | `{ id, quantity }` |
+| `GET` | `/products` | Listar productos disponibles | `{}` |
+| `GET` | `/products/{id}` | Ver detalles de un producto | `{ id }` |
+
+## Compras y Devoluciones
+
+| Método | Endpoint | Descripción | Parámetros |
+|--------|---------|-------------|------------|
+| `POST` | `/purchases` | Comprar un producto | `{ user_id, product_id, quantity }` |
+| `POST` | `/returns` | Devolver un producto | `{ user_id, product_id, quantity }` |
+| `GET` | `/purchases` | Historial de compras | `{}` |
+| `GET` | `/returns` | Historial de devoluciones | `{}` |
+
+## RFID & Hardware
+
+| Método | Endpoint | Descripción | Parámetros |
+|--------|---------|-------------|------------|
+| `POST` | `/rfid/user` | Procesar tarjeta RFID | `{ UUID }` |
+| `POST` | `/rfid/product` | Comprar con RFID | `{ UUID, product_id, quantity }` |
+| `POST` | `/rfid/getCard` | Solicitar leer una tarjeta. Devuelve el UUID leido | `{}` |
+| `POST` | `/rfid/authenticate` | Autenticar usuario con RFID | `{ UUID }` |
+| `GET` | `/rfid/status` | Verificar estado del lector RFID | `{}` |
+
+## Administración
+
+| Método | Endpoint | Descripción | Parámetros |
+|--------|---------|-------------|------------|
+| `GET` | `/stats` | Ver estadísticas de la nevera | `{}` |
+
+
+# TODO
+
+#### Servidor
+- [ ] Crear endpoints en el archivo de routes/api.php
+- [ ] Crear controladores para los endpoints
+- [ ] Crear modelos para las tablas de la base de datos
+- [ ] Crear migraciones para las tablas de la base de datos
+- [ ] Crear seeders para poblar la base de datos
+- [ ] Crear tests para los endpoints
+- [ ] Crear documentación para los endpoints
+- [ ] Crear interfaz web para la gestión de la nevera con React
+- [ ] Crear aplicación móvil para la gestión de la nevera con React Native
+
+#### Hardware
+- [ ] Programar la ESP32
+- [ ] Probar ESP32
+
 
 ## About Laravel
 
@@ -24,42 +134,6 @@ Laravel is accessible, powerful, and provides tools required for large, robust a
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
 ## License
 
