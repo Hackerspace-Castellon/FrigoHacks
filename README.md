@@ -138,7 +138,7 @@ FrigoHacks esta compuesto de 3 cosas:
 #### Hardware
 - [ ] Programar la ESP32
 - [ ] Probar ESP32
-
+- [ ] Disenar caja para la ESP32
 
 ## About Laravel
 
