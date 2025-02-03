@@ -15,12 +15,35 @@ FrigoHacks esta compuesto de 3 cosas:
 - Un sistema de autenticacion fisible con una ESP32, un lector RFID y un pinpad.
 
 
+# Requisitos
+- Servidor web (Apache, Nginx, etc)
+- PHP 8.3
+- Composer
+- NodeJS
+- NPM
+- Base de datos (MySQL, PostgreSQL, SQLite, etc)
+- Lector RFID (PN532)
+- ESP32
+- Pinpad 4x4
+- Pantalla LCD 16x2
+- Arduino IDE
+
 # Tecnologías
 - Laravel 11
 - VueJS
 - React
 - TailwindCSS
 - Arduino
+
+
+# Rutas de la aplicación
+- `/app/Controllers` - Controladores de la aplicación que gestionan las peticiones HTTP
+- `/app/Models` - Modelos de la aplicación (Que se conectan a la base de datos. Mirar Eloquent ORM y la documentación de Laravel sobre los modelos)
+- `/routes/api.php` - Rutas de la API REST que se conectan a los controladores
+- `/database/migrations` - Estrucutra de la base de datos para migrar
+- `/database/seeders` - Seeders para poblar la base de datos
+- `/resources/js` - Archivos de React y VueJS para la interfaz web (frontend)
+- `/public/arduino` - Archivos del código de Arduino para la ESP32 y diagramas de conexión
 
 # Instalación
 - Clonar el repositorio con git
