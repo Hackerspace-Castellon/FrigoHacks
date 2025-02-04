@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Role;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,10 +16,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('email_verified_at')->default(now());
             $table->string('password');
+            $table->decimal('balance', 10, 2)->default(0);
+            $table->string('uuid')->unique();
+            $table->string('pin_code');
             $table->rememberToken();
             $table->timestamps();
+            $table->foreignIdFor(Role::class);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
