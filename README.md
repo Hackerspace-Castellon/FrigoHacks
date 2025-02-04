@@ -110,9 +110,10 @@ FrigoHacks esta compuesto de 3 cosas:
 | Método | Endpoint | Descripción | Parámetros |
 |--------|---------|-------------|------------|
 | `POST` | `/rfid/user` | Procesar tarjeta RFID | `{ UUID }` |
+| `POST` | `/code/user` | Procesar el codigo de usuario | `{ UUID }` |
 | `POST` | `/rfid/product` | Comprar con RFID | `{ UUID, product_id, quantity }` |
+| `POST` | `/code/product` | Comprar con codigo | `{ UUID, product_id, quantity }` |
 | `POST` | `/rfid/getCard` | Solicitar leer una tarjeta. Devuelve el UUID leido | `{}` |
-| `POST` | `/rfid/authenticate` | Autenticar usuario con RFID | `{ UUID }` |
 | `GET` | `/rfid/status` | Verificar estado del lector RFID | `{}` |
 
 ## Administración
