@@ -63,6 +63,12 @@ FrigoHacks esta compuesto de 3 cosas:
 - Genera las paginas con `npm run build`
 
 
+# Pruebas
+- Para ejecutar el servidor en local, ejecuta `php -S <tu_ip_local>:8000 -t public/` desde la carpeta raíz de la aplicación
+- Para ejecutar las pruebas de la aplicación, ejecuta `php artisan test`
+
+
+
 # Endpoints para la App de Gestión de Nevera
 
 ## Autenticación
