@@ -50,7 +50,14 @@ FrigoHacks esta compuesto de 3 cosas:
 - Instalar las dependencias con composer `composer install`
 - Copia el archivo .env.example a .env y modifica las variables de entorno `cp .env.example .env`
 - Modifica e introduce la ip de tu lector RFID en el archivo .env en `ESP32_IP=<Tu_IP>`
-- Modifica los datos de la base de datos en el archivo .env para que coincidan con tu base de datos
+- Ejecuta `php artisan key:generate` para generar una clave de aplicación
+- Modifica los datos de la base de datos en el archivo `.env` para que coincidan con tu base de datos
+    - DB_CONNECTION=<Tu_Motor_De_DB> (mysql, pgsql, sqlite, etc)
+    - DB_HOST= <Tu_IP_De_LA_BASE_DE_DATOS> 
+    - DB_PORT= <Puerto_De_Tu_Base_De_Datos> (Pord defecto 3306 en MySQL y 5432 en PostgreSQL)
+    - DB_USERNAME= <Tu_Usuario_De_Base_De_Datos>
+    - DB_PASSWORD= <Tu_Contraseña_De_Base_De_Datos>
+- Asegurate que la base de datos frigohacks existe en tu base de datos y que el usuario tiene permisos para acceder a ella
 - Migrar la base de datos con `php artisan migrate`
 - Instala las dependencias de node `npm install` (Puedes usar bun, yarn o cualquier otro gestor de paquetes)
 - Genera las paginas con `npm run build`
@@ -111,7 +118,7 @@ FrigoHacks esta compuesto de 3 cosas:
 |--------|---------|-------------|------------|
 | `POST` | `/rfid/user` | Procesar tarjeta RFID | `{ UUID }` |
 | `POST` | `/code/user` | Procesar el codigo de usuario | `{ UUID }` |
-| `POST` | `/rfid/product` | Comprar con RFID | `{ UUID, product_id, quantity }` |
+| `POST` | `/rfid/product` | Comprar con RFID | `{ UUID, prodzuct_id, quantity }` |
 | `POST` | `/code/product` | Comprar con codigo | `{ UUID, product_id, quantity }` |
 | `POST` | `/rfid/getCard` | Solicitar leer una tarjeta. Devuelve el UUID leido | `{}` |
 | `GET` | `/rfid/status` | Verificar estado del lector RFID | `{}` |
@@ -125,21 +132,32 @@ FrigoHacks esta compuesto de 3 cosas:
 
 # TODO
 
-#### Servidor
-- [ ] Crear endpoints en el archivo de routes/api.php
-- [ ] Crear controladores para los endpoints
-- [ ] Crear modelos para las tablas de la base de datos
-- [ ] Crear migraciones para las tablas de la base de datos
-- [ ] Crear seeders para poblar la base de datos
-- [ ] Crear tests para los endpoints
-- [ ] Crear documentación para los endpoints
-- [ ] Crear interfaz web para la gestión de la nevera con React
-- [ ] Crear aplicación móvil para la gestión de la nevera con React Native
+### Servidor
 
-#### Hardware
-- [ ] Programar la ESP32
-- [ ] Probar ESP32
-- [ ] Disenar caja para la ESP32
+- [x]  Crear endpoints en el archivo de routes/api.php
+- [x]  Crear controladores para los endpoints
+    - [ ]  Revisar que esta todos los controladores
+    - [ ]  Revisar que todos los controladores tienen los métodos necesarios
+    - [ ]  Revisar que se conectan a los modelos correctamente y hacen las operaciones necesarias
+- [x]  Crear modelos para las tablas de la base de datos
+- [x]  Crear migraciones para las tablas de la base de datos
+- [ ]  Crear seeders para poblar la base de datos
+- [ ]  Crear tests para los endpoints
+- [ ]  Crear documentación para los endpoints
+- [ ]  Crear interfaz web para la gestión de la nevera con React
+- [ ]  Crear aplicación móvil para la gestión de la nevera con React Native
+
+### Hardware
+
+- [x]  Programar la ESP32
+- [ ]  Probar ESP32
+- [ ]  Disenar caja para la ESP32
+
+
+## Problemas conocidos
+- [ ]  La ESP32 no sirve bien el servidor HTTP y crashea, posiblemente por la falta de memoria
+- [ ]  No funciona bien el teclado y la lectura NFC en paralelo
+
 
 ## About Laravel
 
