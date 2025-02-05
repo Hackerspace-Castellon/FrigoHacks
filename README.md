@@ -165,6 +165,15 @@ FrigoHacks esta compuesto de 3 cosas:
 - [ ]  Crear tests para los endpoints
 - [ ]  Crear documentación para los endpoints
 - [ ]  Crear interfaz web para la gestión de la nevera con React
+    - [X]  Login
+    - [X]  Registro
+    - [ ]  Hacer las interfazes del control
+        - [ ]  Hacer las interfazes del Dashboard
+        - [ ]  Hacer las interfazes de los Productos
+        - [ ]  Hacer las interfazes de los usuarios
+        - [ ]  Hacer las interfazes de las compras
+        - [ ]  Hacer las interfazes de las devoluciones
+        - [ ]  Hacer las interfazes de las estadísticas
 - [ ]  Crear aplicación móvil para la gestión de la nevera con React Native
 
 ### Hardware
