@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -8,21 +8,40 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
-
 import { useRouter } from 'src/routes/hooks';
-
+import { useSanctum }  from 'react-sanctum';
 import { Iconify } from 'src/components/iconify';
+import axios from 'axios';
+
+axios.defaults.withCredentials = true;
+axios.defaults.withXSRFToken = true;
 
 // ----------------------------------------------------------------------
 
 export function SignInView() {
   const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const { authenticated, user, signIn } = useSanctum();
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSignIn = useCallback(() => {
-    router.push('/');
-  }, [router]);
+  const handleSignIn = () => {
+    signIn( email, password, true )
+      .then(() => {
+        router.push('/dashboard');
+      })
+      .catch((err) => {
+        console.error(err);
+        setError(err.response.data.message || 'Unknown error, contact admin');
+      });
+      
+  }
+
+  const handleSignInWithGoogle = () => {
+    window.location.href = `/api/auth/google`;
+  }
 
   const renderForm = (
     <Box display="flex" flexDirection="column" alignItems="flex-end">
@@ -30,9 +49,10 @@ export function SignInView() {
         fullWidth
         name="email"
         label="Email address"
-        defaultValue="hello@gmail.com"
+        placeholder="hello@email.com"
         InputLabelProps={{ shrink: true }}
         sx={{ mb: 3 }}
+        onChange={(e) => setEmail(e.target.value)}
       />
 
       <Link variant="body2" color="inherit" sx={{ mb: 1.5 }}>
@@ -43,7 +63,7 @@ export function SignInView() {
         fullWidth
         name="password"
         label="Password"
-        defaultValue="@demo1234"
+        placeholder="*********"
         InputLabelProps={{ shrink: true }}
         type={showPassword ? 'text' : 'password'}
         InputProps={{
@@ -56,7 +76,12 @@ export function SignInView() {
           ),
         }}
         sx={{ mb: 3 }}
+        onChange={(e) => setPassword(e.target.value)}
       />
+
+      <Typography variant="subtitle2" sx={{ color: 'error.main', mb: 1.5 }}  className='w-full text-center' >
+        {error}
+      </Typography>
 
       <LoadingButton
         fullWidth
@@ -77,7 +102,7 @@ export function SignInView() {
         <Typography variant="h5">Sign in</Typography>
         <Typography variant="body2" color="text.secondary">
           Don’t have an account?
-          <Link variant="subtitle2" sx={{ ml: 0.5 }}>
+          <Link href="register" variant="subtitle2" sx={{ ml: 0.5 }}>
             Get started
           </Link>
         </Typography>
@@ -96,13 +121,7 @@ export function SignInView() {
 
       <Box gap={1} display="flex" justifyContent="center">
         <IconButton color="inherit">
-          <Iconify icon="logos:google-icon" />
-        </IconButton>
-        <IconButton color="inherit">
-          <Iconify icon="eva:github-fill" />
-        </IconButton>
-        <IconButton color="inherit">
-          <Iconify icon="ri:twitter-x-fill" />
+          <Iconify icon="logos:google-icon" onClick={handleSignInWithGoogle} />
         </IconButton>
       </Box>
     </>

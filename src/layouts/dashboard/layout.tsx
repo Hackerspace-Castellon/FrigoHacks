@@ -22,6 +22,9 @@ import { HeaderSection } from '../core/header-section';
 import { AccountPopover } from '../components/account-popover';
 import { LanguagePopover } from '../components/language-popover';
 import { NotificationsPopover } from '../components/notifications-popover';
+import { useSanctum } from 'react-sanctum';
+
+
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +42,8 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
   const [navOpen, setNavOpen] = useState(false);
 
   const layoutQuery: Breakpoint = 'lg';
+
+  var { authenticated, user } = useSanctum(); // Llama al hook dentro del componente funcional
 
   return (
     <LayoutSection
@@ -80,24 +85,20 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
             ),
             rightArea: (
               <Box gap={1} display="flex" alignItems="center">
-                <Searchbar />
+                {/* <Searchbar />
                 <LanguagePopover data={_langs} />
-                <NotificationsPopover data={_notifications} />
+                <NotificationsPopover data={_notifications} /> */}
                 <AccountPopover
                   data={[
                     {
                       label: 'Home',
-                      href: '/',
+                      href: '/dashboard',
                       icon: <Iconify width={22} icon="solar:home-angle-bold-duotone" />,
                     },
-                    {
-                      label: 'Profile',
-                      href: '#',
-                      icon: <Iconify width={22} icon="solar:shield-keyhole-bold-duotone" />,
-                    },
+
                     {
                       label: 'Settings',
-                      href: '#',
+                      href: '/dashboard/settings',
                       icon: <Iconify width={22} icon="solar:settings-bold-duotone" />,
                     },
                   ]}

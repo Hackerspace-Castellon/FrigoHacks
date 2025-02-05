@@ -1,44 +1,38 @@
 import 'src/global.css';
 
 import Fab from '@mui/material/Fab';
-
 import { Router } from 'src/routes/sections';
-
 import { useScrollToTop } from 'src/hooks/use-scroll-to-top';
-
 import { ThemeProvider } from 'src/theme/theme-provider';
-
 import { Iconify } from 'src/components/iconify';
+import { Sanctum } from 'react-sanctum';
+import axios from 'axios';
+import { CONFIG } from 'src/config-global';
+// change dotenv file path
+
+axios.defaults.withCredentials = true;
+axios.defaults.withXSRFToken = true;
+
+
 
 // ----------------------------------------------------------------------
 
 export default function App() {
   useScrollToTop();
 
-  const githubButton = (
-    <Fab
-      size="medium"
-      aria-label="Github"
-      href="https://github.com/minimal-ui-kit/material-kit-react"
-      sx={{
-        zIndex: 9,
-        right: 20,
-        bottom: 20,
-        width: 44,
-        height: 44,
-        position: 'fixed',
-        bgcolor: 'grey.800',
-        color: 'common.white',
-      }}
-    >
-      <Iconify width={24} icon="eva:github-fill" />
-    </Fab>
-  );
+  const sanctumConfig = {
+    apiUrl: CONFIG.appURL,
+    csrfCookieRoute: 'sanctum/csrf-cookie',
+    signInRoute: 'api/login',
+    signOutRoute: 'logout',
+    userObjectRoute: 'api/user',
+  };
 
   return (
     <ThemeProvider>
-      <Router />
-      {githubButton}
+      <Sanctum config={sanctumConfig}>
+        <Router />
+      </Sanctum>
     </ThemeProvider>
   );
 }

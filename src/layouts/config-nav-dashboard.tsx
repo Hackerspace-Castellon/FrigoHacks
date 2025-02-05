@@ -7,20 +7,22 @@ const icon = (name: string) => (
   <SvgColor width="100%" height="100%" src={`/assets/icons/navbar/${name}.svg`} />
 );
 
+const prefix = '/dashboard';
+
 export const navData = [
   {
     title: 'Dashboard',
-    path: '/',
+    path: `${prefix}/`,
     icon: icon('ic-analytics'),
   },
   {
     title: 'User',
-    path: '/user',
+    path: `${prefix}/user`,
     icon: icon('ic-user'),
   },
   {
     title: 'Product',
-    path: '/products',
+    path: `${prefix}/products`,
     icon: icon('ic-cart'),
     info: (
       <Label color="error" variant="inverted">
@@ -28,14 +30,10 @@ export const navData = [
       </Label>
     ),
   },
-  {
-    title: 'Blog',
-    path: '/blog',
-    icon: icon('ic-blog'),
-  },
+
   {
     title: 'Sign in',
-    path: '/sign-in',
+    path: '/login',
     icon: icon('ic-lock'),
   },
   {
