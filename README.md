@@ -169,6 +169,7 @@ FrigoHacks esta compuesto de 3 cosas:
     - [X]  Registro
     - [ ]  Hacer las interfazes del control
         - [ ]  Hacer las interfazes del Dashboard
+            - [ ] cantidades vendidas total por día semana mes y cantidades por socio
         - [ ]  Hacer las interfazes de los Productos
         - [ ]  Hacer las interfazes de los usuarios
         - [ ]  Hacer las interfazes de las compras
