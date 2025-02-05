@@ -51,14 +51,28 @@ FrigoHacks esta compuesto de 3 cosas:
 - Copia el archivo .env.example a .env y modifica las variables de entorno `cp .env.example .env`
 - Modifica e introduce la ip de tu lector RFID en el archivo .env en `ESP32_IP=<Tu_IP>`
 - Ejecuta `php artisan key:generate` para generar una clave de aplicación
+- Ejecuta `php artisan passport:keys` para generar las claves de Passport
+- Modifica en el archivo `.env` las siguientes variables:
+    - APP_URL=<URL_De_Tu_Aplicación>
+    - ALLOWED_EMAILS=<Emails_De_Usuarios_Autorizados> (Separados por coma \[fran@hackcs.com, alberto@gmail.com, etc\])
+    - ALLOWED_ORGANIZATIONS_EMAILS=<Emails_De_Usuarios_Autorizados_De_La_Organización> (Separados por coma \[hackcs.com, gmail.com, hotmail.com, etc\])
 - Modifica los datos de la base de datos en el archivo `.env` para que coincidan con tu base de datos
     - DB_CONNECTION=<Tu_Motor_De_DB> (mysql, pgsql, sqlite, etc)
     - DB_HOST= <Tu_IP_De_LA_BASE_DE_DATOS> 
     - DB_PORT= <Puerto_De_Tu_Base_De_Datos> (Pord defecto 3306 en MySQL y 5432 en PostgreSQL)
     - DB_USERNAME= <Tu_Usuario_De_Base_De_Datos>
     - DB_PASSWORD= <Tu_Contraseña_De_Base_De_Datos>
+- Modifica en el archivo `.env` las siguientes variables si quieres iniciar sesion con tu organización de Google
+    - GOOGLE_CLIENT_ID=<Tu_Client_ID>
+    - GOOGLE_CLIENT_SECRET = <Tu_Client_Secret>
+    - GOOGLE_REDIRECT_URI = <Tu_Redirect_URI>
+    - Tutoarial aqui: https://developers.google.com/identity/protocols/oauth2
+- Para la autenticación debes configurar en el archivo `.env` las siguientes variables:
+    - SESSION_DOMAIN = <Tu_Dominio> (Debe ser .<Tu_Dominio> para que funcione, sin rutas ni puertos)
+    - SANCTUM_STATEFUL_DOMAIN = <Tu_Dominio> (Donde estara el frontend)
 - Asegurate que la base de datos frigohacks existe en tu base de datos y que el usuario tiene permisos para acceder a ella
 - Migrar la base de datos con `php artisan migrate`
+- Modificar en el archivo `src/config-global` la variable `appUrl` con el URL de tu servidor
 - Instala las dependencias de node `npm install` (Puedes usar bun, yarn o cualquier otro gestor de paquetes)
 - Genera las paginas con `npm run build`
 
