@@ -3,18 +3,23 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
-use App\Http\Controllers\ReturnController;
 use App\Http\Controllers\RfidController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\GoogleAuthController;
 
-// Rutas de autenticación
-Route::prefix('auth')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/logout', [AuthController::class, 'logout']);
-});
+
+
+
+
+Route::prefix('user')->group(function () {
+        Route::get('/', [UserController::class, 'get']);
+        Route::put('/', [UserController::class, 'update']);
+        Route::post('/password', [UserController::class, 'updatePassword']);
+        // Route::post('logout', [AuthController::class, 'logout']);
+    });
+
 
 // test api
 Route::get('/test', function () {
@@ -56,9 +61,20 @@ Route::prefix('rfid')->group(function () {
     Route::post('/code/user', [RfidController::class, 'processCode']);
     Route::post('/product', [RfidController::class, 'purchaseWithRfid']);
     Route::post('/code/product', [RfidController::class, 'purchaseWithCode']);
-    Route::post('/getCard', [RfidController::class, 'getCard']);
+    Route::get('/getCard', [RfidController::class, 'getCard']);
     Route::get('/status', [RfidController::class, 'status']);
 });
+
+
+
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+Route::get('/auth/google', [GoogleAuthController::class, 'redirect']);
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
+
 
 // Rutas de administración
 Route::get('/stats', [AdminController::class, 'stats']);
