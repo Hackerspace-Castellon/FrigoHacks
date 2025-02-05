@@ -7,6 +7,18 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+
+      public function get(Request $request)
+    {
+
+        // request user with tiers and aviable factures to make
+        $user =  $request->user();
+ 
+        return response()->json($user, 200);
+    }
+
+
+
     public function store(Request $request)
     {
         $validated = $request->validate([
