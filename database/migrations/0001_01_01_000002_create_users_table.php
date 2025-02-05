@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('pin_code');
             $table->rememberToken();
             $table->timestamps();
-            $table->foreignIdFor(Role::class);
+            $table->foreignIdFor(Role::class)->default(2);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
