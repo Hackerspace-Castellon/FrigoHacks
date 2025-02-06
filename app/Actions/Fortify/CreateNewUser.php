@@ -44,6 +44,21 @@ class CreateNewUser implements CreatesNewUsers
             'uuid' => ['required', 'string', 'max:12'],
         ])->validate();
 
+        // check if email is in ALLOWED_EMAILS or ending in ALLOWED_ORGANIZATIONS_EMAILS
+        $allowed_emails = explode(',', env('ALLOWED_EMAILS'));
+        $allowed_organizations_emails = explode(',', env('ALLOWED_ORGANIZATIONS_EMAILS'));
+
+
+
+        if(!(env('ALLOWED_ORGANIZATIONS_EMAILS') == null || env('ALLOWED_ORGANIZATIONS_EMAILS') == '' || env('ALLOWED_ORGANIZATIONS_EMAILS') == '*') || !(env('ALLOWED_EMAILS') == null || env('ALLOWED_EMAILS') == '' || env('ALLOWED_EMAILS') == '*')) {
+            $email = $input['email'];
+            $email_domain = substr(strrchr($email, "@"), 1);
+            if (!in_array($email, $allowed_emails) && !in_array($email_domain, $allowed_organizations_emails)) {
+                throw new \Exception('Unauthorized email');
+
+            }
+        }
+
         $pin_code = $this->generatePinCode();
         // check if pin code exists
         while (User::where('pin_code', $pin_code)->exists()) {
