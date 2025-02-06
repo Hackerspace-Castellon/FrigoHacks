@@ -1,6 +1,6 @@
 import type { Theme, SxProps, Breakpoint } from '@mui/material/styles';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
@@ -13,7 +13,7 @@ import { Iconify } from 'src/components/iconify';
 import { Main } from './main';
 import { layoutClasses } from '../classes';
 import { NavMobile, NavDesktop } from './nav';
-import { navData } from '../config-nav-dashboard';
+import { navData1, navData2 } from '../config-nav-dashboard';
 import { Searchbar } from '../components/searchbar';
 import { _workspaces } from '../config-nav-workspace';
 import { MenuButton } from '../components/menu-button';
@@ -40,10 +40,14 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
   const theme = useTheme();
 
   const [navOpen, setNavOpen] = useState(false);
-
   const layoutQuery: Breakpoint = 'lg';
-
-  var { authenticated, user } = useSanctum(); // Llama al hook dentro del componente funcional
+  const { authenticated, user } = useSanctum(); // Llama al hook dentro del componente funcional
+  const [navData, setNavData] = useState(navData2);
+  
+  useEffect(() => {
+    setNavData(user?.role_id === 1 ? navData1 : navData2); // Si el usuario es admin, carga navData1, sino navData2
+  }, [user]);
+  
 
   return (
     <LayoutSection
