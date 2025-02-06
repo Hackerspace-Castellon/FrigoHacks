@@ -17,6 +17,7 @@ Route::prefix('user')->group(function () {
         Route::get('/', [UserController::class, 'get']);
         Route::put('/', [UserController::class, 'update']);
         Route::post('/password', [UserController::class, 'updatePassword']);
+        Route::post('/transactions', [UserController::class, 'transactions']);
         // Route::post('logout', [AuthController::class, 'logout']);
     });
 
@@ -34,7 +35,7 @@ Route::prefix('users')->group(function () {
     Route::delete('/{id}', [UserController::class, 'destroy']);
     Route::get('/{id}/balance', [UserController::class, 'balance']);
     Route::get('/balances', [UserController::class, 'balances']);
-    Route::get('/{id}/transactions', [UserController::class, 'transactions']);
+    Route::get('/{id}/transactions', [UserController::class, 'transactionsSpecify']);
 });
 
 // Rutas de productos
