@@ -77,9 +77,16 @@ class UserController extends Controller
         return response()->json($users->pluck('balance'));
     }
 
-    public function transactions($id)
+    public function transactionsSpecify($id)
     {
         $user = User::findOrFail($id);
-        return response()->json($user->transactions);
+        return response()->json($user->transactions()->with('product:name')->get());
+    }
+    
+    public function transactions(Request $request)
+    {
+        $user =  $request->user();
+        // return users tranasctions with the product name in the response without adding hole product object
+        return response()->json($user->transactions()->with('product:name')->get());
     }
 }
