@@ -77,10 +77,10 @@ class RfidController extends Controller
     // Procesar usuario a través de código (pin_code)
     public function processCode(Request $request)
     {
+        // Log::info($request->all());
         $validated = $request->validate([
             'user_code' => 'required|string',
         ]);
-
         $user = User::where('pin_code', $validated['user_code'])->first();
 
         return $this->userGlobal($user);
