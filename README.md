@@ -162,33 +162,44 @@ FrigoHacks esta compuesto de 3 cosas:
     - [ ]  Revisar que se conectan a los modelos correctamente y hacen las operaciones necesarias
 - [x]  Crear modelos para las tablas de la base de datos
 - [x]  Crear migraciones para las tablas de la base de datos
-- [ ]  Crear seeders para poblar la base de datos
+- [x]  Crear seeders para poblar la base de datos
 - [ ]  Crear tests para los endpoints
-- [ ]  Crear documentación para los endpoints
+- [ ]  Crear documentación para los endpoints (Esta pachi pacha, falta mas info)
 - [ ]  Crear interfaz web para la gestión de la nevera con React
-    - [X]  Login
-    - [X]  Registro
-    - [ ]  Hacer las interfazes del control
+    - [x]  Login
+    - [x]  Registro
+    - [x]  Hacer las interfazes del control
+    - [x]  Panel lateral por roles (admin y usuario)
         - [ ]  Hacer las interfazes del Dashboard
-            - [ ] cantidades vendidas total por día semana mes y cantidades por socio
-        - [ ]  Hacer las interfazes de los Productos
-        - [ ]  Hacer las interfazes de los usuarios
-        - [ ]  Hacer las interfazes de las compras
-        - [ ]  Hacer las interfazes de las devoluciones
+            - [ ]  cantidades vendidas total por día semana mes y cantidades por socio
+        - [x]  Hacer las interfazes de los Productos
+            - [x]  Mostrar todos los productos actuales con la foto
+            - [x]  Poder agregar  producto con la foto (procesarla a webp al subirla)
+            - [x]  Si es admin, mostrar la opccion de modificar [nombre, precio, cantidad en nevera]
+            - [x]  Si haces click en el producto salir popup de confirmar compra
+        - [x]  Hacer las interfazes de los usuarios
+            - [x]  Mostrar las transacciones (falta hacer coincidir los campos con los de la BBDD)
+            - [x]  Hacer las llamadas a la api de agregar y eliminar dinero (SWAL)
+            - [ ]  Hacer funcion en elmenu de las transaciones para poder devolver un producto (si no han pasado mas de 2 minutos de la compra)
         - [ ]  Hacer las interfazes de las estadísticas
 - [ ]  Crear aplicación móvil para la gestión de la nevera con React Native
 
 ### Hardware
 
 - [x]  Programar la ESP32
-- [ ]  Probar ESP32
+- [x]  Probar ESP32
+    - [x]  Probar autenticar usuario
+    - [x]  Probar comprar producto
+    - [x]  Probar coger status
+    - [x]  Probar leer tarjeta remotamente
+    - [ ]  Implementar pin IRQ (interupcion por hardware) para la lectura? Investigar al respecto
 - [ ]  Disenar caja para la ESP32
 
-
 ## Problemas conocidos
-- [ ]  La ESP32 no sirve bien el servidor HTTP y crashea, posiblemente por la falta de memoria
-- [ ]  No funciona bien el teclado y la lectura NFC en paralelo
 
+- [X]  La ESP32 no sirve bien el servidor HTTP y crashea, posiblemente por la falta de memoria
+- [ ]  No funciona bien el teclado y la lectura NFC en paralelo
+- [ ]  En la pantalla de comprar producto solo se puede comprar haciendo clickl en la imagen si eres admin
 
 ## About Laravel
 
