@@ -157,15 +157,15 @@ FrigoHacks esta compuesto de 3 cosas:
 
 - [x]  Crear endpoints en el archivo de routes/api.php
 - [x]  Crear controladores para los endpoints
-    - [ ]  Revisar que esta todos los controladores
-    - [ ]  Revisar que todos los controladores tienen los métodos necesarios
-    - [ ]  Revisar que se conectan a los modelos correctamente y hacen las operaciones necesarias
+    - [x]  Revisar que esta todos los controladores
+    - [x]  Revisar que todos los controladores tienen los métodos necesarios
+    - [x]  Revisar que se conectan a los modelos correctamente y hacen las operaciones necesarias
 - [x]  Crear modelos para las tablas de la base de datos
 - [x]  Crear migraciones para las tablas de la base de datos
 - [x]  Crear seeders para poblar la base de datos
 - [ ]  Crear tests para los endpoints
 - [ ]  Crear documentación para los endpoints (Esta pachi pacha, falta mas info)
-- [ ]  Crear interfaz web para la gestión de la nevera con React
+- [x]  Crear interfaz web para la gestión de la nevera con React
     - [x]  Login
     - [x]  Registro
     - [x]  Hacer las interfazes del control
@@ -197,8 +197,8 @@ FrigoHacks esta compuesto de 3 cosas:
 
 ## Problemas conocidos
 
-- [X]  La ESP32 no sirve bien el servidor HTTP y crashea, posiblemente por la falta de memoria
-- [ ]  No funciona bien el teclado y la lectura NFC en paralelo
+- [x]  La ESP32 no sirve bien el servidor HTTP y crashea, posiblemente por la falta de memoria
+- [x]  No funciona bien el teclado y la lectura NFC en paralelo
 - [ ]  En la pantalla de comprar producto solo se puede comprar haciendo clickl en la imagen si eres admin
 
 ## About Laravel
