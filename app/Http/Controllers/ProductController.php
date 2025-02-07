@@ -93,8 +93,6 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $validated['image'] = $this->saveImage($request);
             $validated['image'] = $validated['image'] . '.webp';
-        }else{
-            $validated['image'] = 'default.webp';
         }
 
         $product = Product::findOrFail($id);
@@ -103,6 +101,8 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             // remove not unlink
             File::delete(public_path('images/' . $product->image . '.webp'));
+        }else{
+            $validated['image'] = $product->image;
         }
 
         $product->update($validated);
