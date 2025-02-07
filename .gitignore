@@ -3,8 +3,8 @@
 /node_modules
 /public/build
 /public/hot
-# /public/images
-# !/public/images/default.webp
+/public/images
+!/public/images/default.webp
 /public/storage
 /storage/*.key
 /storage/pail
