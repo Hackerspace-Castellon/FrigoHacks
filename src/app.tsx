@@ -8,6 +8,7 @@ import { Iconify } from 'src/components/iconify';
 import { Sanctum } from 'react-sanctum';
 import axios from 'axios';
 import { CONFIG } from 'src/config-global';
+
 // change dotenv file path
 
 axios.defaults.withCredentials = true;

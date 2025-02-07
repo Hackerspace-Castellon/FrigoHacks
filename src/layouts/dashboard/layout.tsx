@@ -7,6 +7,8 @@ import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 
 import { _langs, _notifications } from 'src/_mock';
+import { useRouter } from 'src/routes/hooks';
+
 
 import { Iconify } from 'src/components/iconify';
 
@@ -38,109 +40,115 @@ export type DashboardLayoutProps = {
 
 export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) {
   const theme = useTheme();
+  const router = useRouter();
 
   const [navOpen, setNavOpen] = useState(false);
   const layoutQuery: Breakpoint = 'lg';
   const { authenticated, user } = useSanctum(); // Llama al hook dentro del componente funcional
   const [navData, setNavData] = useState(navData2);
   
+  
+
   useEffect(() => {
     setNavData(user?.role_id === 1 ? navData1 : navData2); // Si el usuario es admin, carga navData1, sino navData2
   }, [user]);
   
+  if (authenticated === false) {
+    router.push('/login');
+  }else{
+    return (
+      <LayoutSection
+        /** **************************************
+         * Header
+         *************************************** */
+        headerSection={
+          <HeaderSection
+            layoutQuery={layoutQuery}
+            slotProps={{
+              container: {
+                maxWidth: false,
+                sx: { px: { [layoutQuery]: 5 } },
+              },
+            }}
+            sx={header?.sx}
+            slots={{
+              topArea: (
+                <Alert severity="info" sx={{ display: 'none', borderRadius: 0 }}>
+                  This is an info Alert.
+                </Alert>
+              ),
+              leftArea: (
+                <>
+                  <MenuButton
+                    onClick={() => setNavOpen(true)}
+                    sx={{
+                      ml: -1,
+                      [theme.breakpoints.up(layoutQuery)]: { display: 'none' },
+                    }}
+                  />
+                  <NavMobile
+                    data={navData}
+                    open={navOpen}
+                    onClose={() => setNavOpen(false)}
+                    workspaces={_workspaces}
+                  />
+                </>
+              ),
+              rightArea: (
+                <Box gap={1} display="flex" alignItems="center">
+                  {/* <Searchbar />
+                  <LanguagePopover data={_langs} />
+                  <NotificationsPopover data={_notifications} /> */}
+                  <AccountPopover
+                    data={[
+                      {
+                        label: 'Home',
+                        href: '/dashboard',
+                        icon: <Iconify width={22} icon="solar:home-angle-bold-duotone" />,
+                      },
 
-  return (
-    <LayoutSection
-      /** **************************************
-       * Header
-       *************************************** */
-      headerSection={
-        <HeaderSection
-          layoutQuery={layoutQuery}
-          slotProps={{
-            container: {
-              maxWidth: false,
-              sx: { px: { [layoutQuery]: 5 } },
+                      {
+                        label: 'Settings',
+                        href: '/dashboard/settings',
+                        icon: <Iconify width={22} icon="solar:settings-bold-duotone" />,
+                      },
+                    ]}
+                  />
+                </Box>
+              ),
+            }}
+          />
+        }
+        /** **************************************
+         * Sidebar
+         *************************************** */
+        sidebarSection={
+          <NavDesktop data={navData} layoutQuery={layoutQuery} workspaces={_workspaces} />
+        }
+        /** **************************************
+         * Footer
+         *************************************** */
+        footerSection={null}
+        /** **************************************
+         * Style
+         *************************************** */
+        cssVars={{
+          '--layout-nav-vertical-width': '300px',
+          '--layout-dashboard-content-pt': theme.spacing(1),
+          '--layout-dashboard-content-pb': theme.spacing(8),
+          '--layout-dashboard-content-px': theme.spacing(5),
+        }}
+        sx={{
+          [`& .${layoutClasses.hasSidebar}`]: {
+            [theme.breakpoints.up(layoutQuery)]: {
+              pl: 'var(--layout-nav-vertical-width)',
             },
-          }}
-          sx={header?.sx}
-          slots={{
-            topArea: (
-              <Alert severity="info" sx={{ display: 'none', borderRadius: 0 }}>
-                This is an info Alert.
-              </Alert>
-            ),
-            leftArea: (
-              <>
-                <MenuButton
-                  onClick={() => setNavOpen(true)}
-                  sx={{
-                    ml: -1,
-                    [theme.breakpoints.up(layoutQuery)]: { display: 'none' },
-                  }}
-                />
-                <NavMobile
-                  data={navData}
-                  open={navOpen}
-                  onClose={() => setNavOpen(false)}
-                  workspaces={_workspaces}
-                />
-              </>
-            ),
-            rightArea: (
-              <Box gap={1} display="flex" alignItems="center">
-                {/* <Searchbar />
-                <LanguagePopover data={_langs} />
-                <NotificationsPopover data={_notifications} /> */}
-                <AccountPopover
-                  data={[
-                    {
-                      label: 'Home',
-                      href: '/dashboard',
-                      icon: <Iconify width={22} icon="solar:home-angle-bold-duotone" />,
-                    },
-
-                    {
-                      label: 'Settings',
-                      href: '/dashboard/settings',
-                      icon: <Iconify width={22} icon="solar:settings-bold-duotone" />,
-                    },
-                  ]}
-                />
-              </Box>
-            ),
-          }}
-        />
-      }
-      /** **************************************
-       * Sidebar
-       *************************************** */
-      sidebarSection={
-        <NavDesktop data={navData} layoutQuery={layoutQuery} workspaces={_workspaces} />
-      }
-      /** **************************************
-       * Footer
-       *************************************** */
-      footerSection={null}
-      /** **************************************
-       * Style
-       *************************************** */
-      cssVars={{
-        '--layout-nav-vertical-width': '300px',
-        '--layout-dashboard-content-pt': theme.spacing(1),
-        '--layout-dashboard-content-pb': theme.spacing(8),
-        '--layout-dashboard-content-px': theme.spacing(5),
-      }}
-      sx={{
-        [`& .${layoutClasses.hasSidebar}`]: {
-          [theme.breakpoints.up(layoutQuery)]: {
-            pl: 'var(--layout-nav-vertical-width)',
           },
-        },
-        ...sx,
-      }}
-    >
-      <Main>{children}</Main>
-    </LayoutSection>
-  );
+          ...sx,
+        }}
+      >
+        <Main>{children}</Main>
+      </LayoutSection>
+    );
+  }
 }

@@ -7,17 +7,18 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RfidController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\GoogleAuthController;
-
-
-
-
+use App\Http\Middleware\IsAdmin;
 
 Route::prefix('user')->group(function () {
         Route::get('/', [UserController::class, 'get']);
         Route::put('/', [UserController::class, 'update']);
+        Route::put('/add-balance', [UserController::class, 'addBalance']);
+        Route::put('/remove-balance', [UserController::class, 'removeBalance']);
         Route::post('/password', [UserController::class, 'updatePassword']);
-        Route::post('/transactions', [UserController::class, 'transactions']);
+        Route::get('/transactions', [UserController::class, 'transactions']);
+        Route::post('/buy', [UserController::class, 'buy']);
         // Route::post('logout', [AuthController::class, 'logout']);
     });
 
@@ -28,26 +29,27 @@ Route::get('/test', function () {
 });
 
 // Rutas de usuarios
-Route::prefix('users')->group(function () {
-    Route::post('/', [UserController::class, 'store']);
-    Route::get('/{id}', [UserController::class, 'show']);
-    Route::put('/{id}', [UserController::class, 'update']);
-    Route::delete('/{id}', [UserController::class, 'destroy']);
-    Route::get('/{id}/balance', [UserController::class, 'balance']);
-    Route::get('/balances', [UserController::class, 'balances']);
-    Route::get('/{id}/transactions', [UserController::class, 'transactionsSpecify']);
+Route::prefix('users')->middleware(IsAdmin::class)->group(function () {
+    Route::get('/', [AdminUserController::class, 'showAll']);
+    Route::get('/{id}', [AdminUserController::class, 'show']);
+    Route::post('/', [AdminUserController::class, 'store']);
+    Route::put('/{id}', [AdminUserController::class, 'update']);
+    Route::delete('/{id}', [AdminUserController::class, 'destroy']);
+    Route::get('/{id}/balance', [AdminUserController::class, 'balance']);
+    Route::get('/balances', [AdminUserController::class, 'balances']);
+    Route::get('/{id}/transactions', [AdminUserController::class, 'transactionsSpecify']);
 });
 
 // Rutas de productos
-Route::prefix('products')->group(function () {
-    Route::post('/', [ProductController::class, 'store']);
-    Route::delete('/{id}', [ProductController::class, 'destroy']);
-    Route::patch('/{id}/quantity', [ProductController::class, 'updateQuantity']);
-    Route::patch('/{id}/price', [ProductController::class, 'updatePrice']);
-    Route::patch('/{id}/restock', [ProductController::class, 'restock']);
-    Route::get('/', [ProductController::class, 'index']);
+Route::get('/products/print', [ProductController::class, 'print']);
+Route::prefix('products')->middleware(IsAdmin::class)->group(function () {
+    Route::get('/', [ProductController::class, 'showAll']);
     Route::get('/{id}', [ProductController::class, 'show']);
+    Route::post('/', [ProductController::class, 'store']);
+    Route::post('/update/{id}', [ProductController::class, 'update']);
+    Route::delete('/{id}', [ProductController::class, 'destroy']);
 });
+
 
 // Rutas de compras y devoluciones
 Route::prefix('purchases')->group(function () {

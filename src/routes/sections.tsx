@@ -10,6 +10,7 @@ import { DashboardLayout } from 'src/layouts/dashboard';
 
 // ----------------------------------------------------------------------
 
+export const LandingPage = lazy(() => import('src/pages/landing_page'));
 export const HomePage = lazy(() => import('src/pages/home'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
 export const UserPage = lazy(() => import('src/pages/user'));
@@ -36,6 +37,18 @@ const renderFallback = (
 
 export function Router() {
   return useRoutes([
+
+    {
+      path: '/',
+      element: (
+       
+          
+            <LandingPage />
+          
+       
+      ),
+    },
+
     {
       path: '/dashboard',
       element: (

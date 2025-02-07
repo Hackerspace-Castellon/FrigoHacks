@@ -1,144 +1,126 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import { Box, Grid, Typography, Card, CardMedia, CardContent, Button } from '@mui/material';
 
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Unstable_Grid2';
-import Pagination from '@mui/material/Pagination';
-import Typography from '@mui/material/Typography';
-
-import { _products } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
+import { handleAddProduct, handleBuyProduct, handleEditProduct } from './handleProductsActions';
+import CheckIcon from '@mui/icons-material/Check';
+import CancelIcon from '@mui/icons-material/Cancel';
+import EditIcon from '@mui/icons-material/Edit';
+import { CONFIG } from 'src/config-global';
+import { useSanctum } from 'react-sanctum';
+import { useRouter } from 'src/routes/hooks';
 
-import { ProductItem } from '../product-item';
-import { ProductSort } from '../product-sort';
-import { CartIcon } from '../product-cart-widget';
-import { ProductFilters } from '../product-filters';
-
-import type { FiltersProps } from '../product-filters';
-
-// ----------------------------------------------------------------------
-
-const GENDER_OPTIONS = [
-  { value: 'men', label: 'Men' },
-  { value: 'women', label: 'Women' },
-  { value: 'kids', label: 'Kids' },
-];
-
-const CATEGORY_OPTIONS = [
-  { value: 'all', label: 'All' },
-  { value: 'shose', label: 'Shose' },
-  { value: 'apparel', label: 'Apparel' },
-  { value: 'accessories', label: 'Accessories' },
-];
-
-const RATING_OPTIONS = ['up4Star', 'up3Star', 'up2Star', 'up1Star'];
-
-const PRICE_OPTIONS = [
-  { value: 'below', label: 'Below $25' },
-  { value: 'between', label: 'Between $25 - $75' },
-  { value: 'above', label: 'Above $75' },
-];
-
-const COLOR_OPTIONS = [
-  '#00AB55',
-  '#000000',
-  '#FFFFFF',
-  '#FFC0CB',
-  '#FF4842',
-  '#1890FF',
-  '#94D82D',
-  '#FFC107',
-];
-
-const defaultFilters = {
-  price: '',
-  gender: [GENDER_OPTIONS[0].value],
-  colors: [COLOR_OPTIONS[4]],
-  rating: RATING_OPTIONS[0],
-  category: CATEGORY_OPTIONS[0].value,
-};
+interface User {
+  role_id: number;
+  // Add other user properties if needed
+}
 
 export function ProductsView() {
-  const [sortBy, setSortBy] = useState('featured');
+  const [products, setProducts] = useState([]);
+  const { authenticated, user } = useSanctum(); // Llama al hook dentro del componente funcional
+  const router = useRouter();
 
-  const [openFilter, setOpenFilter] = useState(false);
 
-  const [filters, setFilters] = useState<FiltersProps>(defaultFilters);
-
-  const handleOpenFilter = useCallback(() => {
-    setOpenFilter(true);
+  useEffect(() => {
+    fetchProducts();
   }, []);
 
-  const handleCloseFilter = useCallback(() => {
-    setOpenFilter(false);
-  }, []);
+  const fetchProducts = () => {
+    axios
+      .get(`${CONFIG.appURL}/api/products`)
+      .then((response) => {
+        setProducts(Array.isArray(response.data) ? response.data : []);
+      })
+      .catch(() => setProducts([]));
+  };
 
-  const handleSort = useCallback((newSort: string) => {
-    setSortBy(newSort);
-  }, []);
 
-  const handleSetFilters = useCallback((updateState: Partial<FiltersProps>) => {
-    setFilters((prevValue) => ({ ...prevValue, ...updateState }));
-  }, []);
-
-  const canReset = Object.keys(filters).some(
-    (key) => filters[key as keyof FiltersProps] !== defaultFilters[key as keyof FiltersProps]
-  );
 
   return (
     <DashboardContent>
-      <Typography variant="h4" sx={{ mb: 5 }}>
-        Products
-      </Typography>
-
-      <CartIcon totalItems={8} />
-
-      <Box
-        display="flex"
-        alignItems="center"
-        flexWrap="wrap-reverse"
-        justifyContent="flex-end"
-        sx={{ mb: 5 }}
-      >
-        <Box gap={1} display="flex" flexShrink={0} sx={{ my: 1 }}>
-          <ProductFilters
-            canReset={canReset}
-            filters={filters}
-            onSetFilters={handleSetFilters}
-            openFilter={openFilter}
-            onOpenFilter={handleOpenFilter}
-            onCloseFilter={handleCloseFilter}
-            onResetFilter={() => setFilters(defaultFilters)}
-            options={{
-              genders: GENDER_OPTIONS,
-              categories: CATEGORY_OPTIONS,
-              ratings: RATING_OPTIONS,
-              price: PRICE_OPTIONS,
-              colors: COLOR_OPTIONS,
-            }}
-          />
-
-          <ProductSort
-            sortBy={sortBy}
-            onSort={handleSort}
-            options={[
-              { value: 'featured', label: 'Featured' },
-              { value: 'newest', label: 'Newest' },
-              { value: 'priceDesc', label: 'Price: High-Low' },
-              { value: 'priceAsc', label: 'Price: Low-High' },
-            ]}
-          />
-        </Box>
+      <Box display="flex" alignItems="center" justifyContent="space-between" mb={5}>
+        <Typography variant="h4">Productos</Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          id="addButton"
+          onClick={() => { window.location.href = `${CONFIG.appURL}/api/products/print`; }}
+        >
+          Print product list
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          id="addButton"
+          onClick={() => handleAddProduct(fetchProducts)}
+        >
+          Add product
+        </Button>
       </Box>
 
-      <Grid container spacing={3}>
-        {_products.map((product) => (
-          <Grid key={product.id} xs={12} sm={6} md={3}>
-            <ProductItem product={product} />
-          </Grid>
-        ))}
-      </Grid>
+      {products.length === 0 ? (
+        <Typography variant="h6" color="text.secondary" textAlign="center">
+          No hay productos disponibles
+        </Typography>
+      ) : (
+        <Grid container spacing={3} rowGap={3} columnGap={3} className="!ml-4">
+          {products.map((product) => (
+            <Grid key={product.id} xs={5} sm={5} md={3}>
+              <Card
+                onClick={() =>
+                  user?.role_id === 0 ? handleBuyProduct(product.id, fetchProducts) : ''
+                }
+                style={{ cursor: 'pointer' }}
+              >
+                <CardMedia
+                  component="img"
+                  className="w-[100px] h-[100px] md:w-[300px] md:h-[300px]"
+                  image={`${CONFIG.appURL}/images/${product.image}`}
+                  alt={product.name}
+                  onClick={() =>
+                    user?.role_id === 1 ? handleBuyProduct(product.id, fetchProducts) : ''
+                  }
+                  style={{ cursor: 'pointer' }}
+                />
+                <CardContent className={product.in_fridge > 0 ? 'bg-green-50' : 'bg-red-50'}>
+                  <Typography variant="h6">
+                    {product.name} &nbsp;
+                    {product.in_fridge > 0 ? (
+                      <CheckIcon style={{ color: 'green' }} />
+                    ) : (
+                      <CancelIcon style={{ color: 'red' }} />
+                    )}
+                  </Typography>
+                  <Typography color="text.secondary">{product.price}€</Typography>
+                  <Typography variant="body2">
+                    <div className="grid grid-cols-2">
+                      <p>En nevera: {product.in_fridge}</p>
+                      <p>Total: {product.quantity}</p>
+                    </div>
+                  </Typography>
 
-      <Pagination count={10} color="primary" sx={{ mt: 8, mx: 'auto' }} />
+                  {user?.role_id === 1 && (
+                    <Button
+                      startIcon={<EditIcon />}
+                      size="small"
+                      variant="outlined"
+                      color="secondary"
+                      fullWidth
+                      zIndex={1}
+                      onClick={() => handleEditProduct(product, fetchProducts)}
+                      sx={{ mt: 1 }}
+                    >
+                      Edit
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </DashboardContent>
   );
 }

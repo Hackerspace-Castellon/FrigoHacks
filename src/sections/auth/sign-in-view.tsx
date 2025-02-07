@@ -39,6 +39,10 @@ export function SignInView() {
       
   }
 
+  if(authenticated === true) {
+    router.push('/dashboard');
+  }
+
   const handleSignInWithGoogle = () => {
     window.location.href = `/api/auth/google`;
   }

@@ -35,7 +35,7 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
 
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
 
-  var { authenticated, user } = useSanctum(); // Llama al hook dentro del componente funcional
+  const { authenticated, user } = useSanctum(); // Llama al hook dentro del componente funcional
 
   const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     setOpenPopover(event.currentTarget);
@@ -68,7 +68,8 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
         {...other}
       >
         <Avatar src={_myAccount.photoURL} alt={user?.name} sx={{ width: 1, height: 1 }}>
-          {user?.name.charAt(0).toUpperCase()}
+          {authenticated && user?.name?.charAt(0).toUpperCase()
+          }
         </Avatar>
       </IconButton>
 

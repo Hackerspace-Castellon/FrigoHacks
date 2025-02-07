@@ -18,7 +18,7 @@ import { useSanctum } from 'react-sanctum';
 // ----------------------------------------------------------------------
 
 export function OverviewAnalyticsView() {
-  const {user} = useSanctum();
+  const { user } = useSanctum();
 
   return (
     <DashboardContent maxWidth="xl">
