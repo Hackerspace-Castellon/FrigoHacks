@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -9,21 +10,68 @@ use Illuminate\Support\Facades\Log;
 
 class RfidController extends Controller
 {
+
+
+    private function userGlobal($user){
+
+        if ($user) {
+            return response()->json(['message' => 'User found'], 200);
+        }
+        return response()->json(['message' => 'User not found'], 404);
+    }
+
+    private function userProduct($user, $product){
+        if ($user) {
+            if ($product) {
+                
+                // check if enought product
+                if ($product->quantity <= 0) {
+                    return response()->json(['message' => 'Product out of stock'], 400);
+                }
+                if ($product->in_fridge <= 0) {
+                    return response()->json(['message' => 'Product not in fridge'], 400);
+                }
+
+                // check if enought balance
+                if ($user->balance < $product->price) {
+                    return response()->json(['message' => 'Insufficient balance'], 400);
+                }
+
+                // remove balance
+                $user->balance -= $product->price;
+                $user->save();
+
+                // remove product
+                $product->quantity -= 1;
+                $product->in_fridge -= 1;
+                $product->save();
+
+                // create transaction
+                $user->transactions()->create([
+                    'user_id' => $user->id,
+                    'product_id' => $product->id,
+                    'quantity' => 1,
+                    'amount' => $product->price,
+                    'type' => 'purchase',
+                ]);
+
+                return response()->json(['message' => 'Product bought successfully'], 200);
+                
+
+            }
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+        return response()->json(['message' => 'User not found'], 404);
+    }
+
     // Procesar usuario a través de RFID
     public function processUser(Request $request)
     {
         $validated = $request->validate([
             'UUID' => 'required|string',
         ]);
-        Log::info($validated['UUID']);
-        return response()->json(['message' => 'User found'], 200);
-        $user = User::where('UUID', $validated['UUID'])->first();
-
-        if ($user) {
-            return response()->json(['message' => 'User found'], 200);
-        }
-
-        return response()->json(['message' => 'User not found'], 404);
+        $user = User::where('uuid', $validated['UUID'])->first();
+        return $this->userGlobal($user);
     }
 
     // Procesar usuario a través de código (pin_code)
@@ -35,11 +83,7 @@ class RfidController extends Controller
 
         $user = User::where('pin_code', $validated['user_code'])->first();
 
-        if ($user) {
-            return response()->json(['message' => 'User found'], 200);
-        }
-
-        return response()->json(['message' => 'User not found'], 404);
+        return $this->userGlobal($user);
     }
 
     // Comprar producto con RFID
@@ -50,18 +94,10 @@ class RfidController extends Controller
             'product_id' => 'required|string',
         ]);
 
-        // Aquí puedes realizar la lógica para la compra con RFID
-        $url = env('ESP32_IP') . '/rfid/product';
-        $response = Http::post($url, [
-            'UUID' => $validated['UUID'],
-            'product_id' => $validated['product_id']
-        ]);
+        $product = Product::findOrFail($validated['product_id']);
+        $user = User::where('uuid', $validated['UUID'])->first();
 
-        if ($response->status() == 200) {
-            return response()->json(['message' => 'Producto suministrado'], 200);
-        }
-
-        return response()->json(['message' => 'Error en producto'], 400);
+        return $this->userProduct($user, $product);
     }
 
     // Comprar producto con código
@@ -72,18 +108,10 @@ class RfidController extends Controller
             'product_id' => 'required|string',
         ]);
 
-        // Aquí puedes realizar la lógica para la compra con código
-        $url = env('ESP32_IP') . '/code/product';
-        $response = Http::post($url, [
-            'user_code' => $validated['user_code'],
-            'product_id' => $validated['product_id']
-        ]);
+        $product = Product::findOrFail($validated['product_id']);
+        $user = User::where('pin_code', $validated['user_code'])->first();
 
-        if ($response->status() == 200) {
-            return response()->json(['message' => 'Producto suministrado'], 200);
-        }
-
-        return response()->json(['message' => 'Error en producto'], 400);
+        return $this->userProduct($user, $product);
     }
 
     // Obtener UUID de la tarjeta RFID
