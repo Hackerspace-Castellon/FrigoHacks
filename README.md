@@ -78,7 +78,7 @@ FrigoHacks esta compuesto de 3 cosas:
 
 
 # Pruebas
-- Para ejecutar el servidor en local, ejecuta `php -S <tu_ip_local>:8000 -t public/` desde la carpeta raíz de la aplicación
+- Para ejecutar el servidor en local, ejecuta `php -S 0.0.0.0:8000 -t public/` desde la carpeta raíz de la aplicación
 - Para ejecutar las pruebas de la aplicación, ejecuta `php artisan test`
 
 
@@ -122,6 +122,7 @@ FrigoHacks esta compuesto de 3 cosas:
 | `PATCH` | `/products/{id}/restock` | Agregar stock de un producto | `{ id, quantity }` |
 | `GET` | `/products` | Listar productos disponibles | `{}` |
 | `GET` | `/products/{id}` | Ver detalles de un producto | `{ id }` |
+| `GET` | `/products/print` | Imprimir lista de productos | `{}` |
 
 ## Compras y Devoluciones
 
