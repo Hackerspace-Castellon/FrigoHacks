@@ -84,7 +84,7 @@ void loop()
 
     displayMessage("Acerca la tarjeta...");
 
-    String uuid = scanNFC();
+    String uuid = scanNFC(150);
     if (!uuid.isEmpty())
     {
         handleUserAuth(uuid, true);
@@ -104,7 +104,7 @@ void handleScan()
     displayMessage("Escaneo remoto...");
     Serial.println("Escaneo remoto de tarjeta solicitado");
 
-    String uuid = scanNFC();
+    String uuid = scanNFC(0);
     if (!uuid.isEmpty())
     {
         server.send(200, "text/plain", uuid);
@@ -113,6 +113,7 @@ void handleScan()
     {
         server.send(404, "text/plain", "No se detectó tarjeta");
     }
+    delay(2000);
 }
 
 // Función para manejar la petición a /status
@@ -123,12 +124,12 @@ void handleStatus()
 }
 
 // Función para escanear NFC
-String scanNFC()
+String scanNFC(int timeoutRead)
 {
     uint8_t uid[7] = {0};
     uint8_t uidLength;
 
-    if (nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength))
+    if (nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength, timeoutRead))
     {
         displayMessage("Escaneando tarjeta...");
 
@@ -150,11 +151,20 @@ void handleKeypadInput(char key)
     static String input = "";
     input += key;
     displayMessage("Usuario: " + input);
-
-    if (input.length() == 2)
+    while (true)
     {
-        handleUserAuth(input, false);
-        input = "";
+        key = keypad.getKey();
+        if (key)
+        {
+            input += key;
+            displayMessage("Usuario: " + input);
+            if (input.length() == 2)
+            {
+                handleUserAuth(input, false);
+                input = "";
+                break;
+            }
+        }
     }
 }
 
@@ -163,7 +173,7 @@ void handleUserAuth(String identifier, bool isRFID)
 {
     displayMessage("Autenticando...");
     HTTPClient http;
-    String url = String(SERVER_URL) + (isRFID ? "/rfid/user" : "/code/user");
+    String url = String(SERVER_URL) + (isRFID ? "/rfid/user" : "/rfid/code/user");
     http.begin(url);
     http.addHeader("Content-Type", "application/json");
 
@@ -208,7 +218,7 @@ void sendProductRequest(String userId, bool isRFID)
     Serial.println("Producto seleccionado: " + productId);
 
     HTTPClient http;
-    String url = String(SERVER_URL) + (isRFID ? "/rfid/product" : "/code/product");
+    String url = String(SERVER_URL) + (isRFID ? "/rfid/product" : "/rfid/code/product");
     http.begin(url);
     http.addHeader("Content-Type", "application/json");
 
@@ -223,6 +233,7 @@ void sendProductRequest(String userId, bool isRFID)
     else
     {
         displayMessage("Error en producto");
+        delay(2000);
     }
     http.end();
 }
