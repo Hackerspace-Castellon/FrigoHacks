@@ -12,6 +12,7 @@ import { useRouter } from 'src/routes/hooks';
 import { useSanctum }  from 'react-sanctum';
 import { Iconify } from 'src/components/iconify';
 import axios from 'axios';
+import { CircularProgress } from '@mui/material';
 
 axios.defaults.withCredentials = true;
 axios.defaults.withXSRFToken = true;
@@ -24,10 +25,13 @@ export function SignInView() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { authenticated, user, signIn } = useSanctum();
+  const [loading, setLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSignIn = () => {
+    setError('');
+    setLoading(true);
     signIn( email, password, true )
       .then(() => {
         router.push('/dashboard');
@@ -35,6 +39,9 @@ export function SignInView() {
       .catch((err) => {
         console.error(err);
         setError(err.response.data.message || 'Unknown error, contact admin');
+      })
+      .finally(() => {
+        setLoading(false);
       });
       
   }
@@ -95,7 +102,7 @@ export function SignInView() {
         variant="contained"
         onClick={handleSignIn}
       >
-        Sign in
+        {loading ? <CircularProgress/> : 'Sign in'}
       </LoadingButton>
     </Box>
   );
