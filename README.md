@@ -19,7 +19,7 @@ FrigoHacks esta compuesto de 3 cosas:
 - Servidor web (Apache, Nginx, etc)
 - PHP 8.3
 - Composer
-- NodeJS
+- NodeJS 22
 - NPM
 - Base de datos (MySQL, PostgreSQL, SQLite, etc)
 - Lector RFID (PN532)
@@ -46,12 +46,14 @@ FrigoHacks esta compuesto de 3 cosas:
 - `/public/arduino` - Archivos del código de Arduino para la ESP32 y diagramas de conexión
 
 # Instalación
-- Clonar el repositorio con git
+- Instalar las dependencias con `sudo apt install composer php8.3 php8.3-cli php8.3-mbstring php8.3-xml php8.3-mysql php8.3-pgsql php8.3-sqlite3 php8.3-curl php8.3-zip php8.3-gd php8.3-xml php8.3-dom`
+- Ir a la carpeta /var/www (o donde hostees el servidor) con `cd /var/www`
+- Clonar el repositorio con git `git clone https://github.com/Hackerspace-Castellon/FrigoHacks.git`
+- Ir a la carpeta del proyecto con `cd FrigoHacks`
 - Instalar las dependencias con composer `composer install`
 - Copia el archivo .env.example a .env y modifica las variables de entorno `cp .env.example .env`
 - Modifica e introduce la ip de tu lector RFID en el archivo .env en `ESP32_IP=<Tu_IP>`
 - Ejecuta `php artisan key:generate` para generar una clave de aplicación
-- Ejecuta `php artisan passport:keys` para generar las claves de Passport
 - Modifica en el archivo `.env` las siguientes variables:
     - APP_URL=<URL_De_Tu_Aplicación>
     - ALLOWED_EMAILS=<Emails_De_Usuarios_Autorizados> (Separados por coma \[fran@hackcs.com, alberto@gmail.com, etc\])
