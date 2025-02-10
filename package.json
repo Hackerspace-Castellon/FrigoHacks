@@ -34,7 +34,7 @@
     "@mui/icons-material": "^6.4.3",
     "@mui/lab": "^5.0.0-alpha.173",
     "@mui/material": "^5.16.7",
-    "@tailwindcss/vite": "^4.0.3",
+    "@tailwindcss/vite": "^4.0.4",
     "apexcharts": "^3.52.0",
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
