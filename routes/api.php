@@ -41,15 +41,18 @@ Route::prefix('users')->middleware(IsAdmin::class)->group(function () {
 });
 
 // Rutas de productos
-Route::get('/products/print', [ProductController::class, 'print']);
-Route::prefix('products')->middleware(IsAdmin::class)->group(function () {
+Route::prefix('products')->group(function () {
     Route::get('/', [ProductController::class, 'showAll']);
-    Route::get('/{id}', [ProductController::class, 'show']);
-    Route::post('/', [ProductController::class, 'store']);
-    Route::post('/update/{id}', [ProductController::class, 'update']);
-    Route::delete('/{id}', [ProductController::class, 'destroy']);
-});
+    Route::get('/print', [ProductController::class, 'print']);
+    // protected admin routes of products
+    Route::middleware(IsAdmin::class)->group(function () {
+        Route::get('/{id}', [ProductController::class, 'show']);
+        Route::post('/', [ProductController::class, 'store']);
+        Route::post('/update/{id}', [ProductController::class, 'update']);
+        Route::delete('/{id}', [ProductController::class, 'destroy']);
+    });
 
+});
 
 // Rutas de compras y devoluciones
 Route::prefix('purchases')->group(function () {

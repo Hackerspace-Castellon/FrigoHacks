@@ -44,22 +44,22 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        // check in_fridge always less than quantity
 
-        // $validated = $request->validate([
-        //     'name' => 'required|string',
-        //     'quantity' => 'required|integer|min:0',
-        //     'in_fridge' => 'required|integer|min:0',
-        //     'price' => 'required|numeric|min:0',
-        //     'file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        // ]);
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'quantity' => 'required|integer|min:0',
+            'in_fridge' => 'required|integer|min:0|lte:quantity',
+            'price' => 'required|numeric|min:0',
+            'file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ], [
+            'in_fridge.lte' => 'The in fridge must be less than or equal to quantity.'
+        ]);
 
-        $validated =[ 
-            'name' => $request->name,
-            'quantity' => $request->quantity,
-            'in_fridge' => $request->in_fridge,
-            'price' => $request->price,
-            'image' => $request->image,
-        ];
+
+        if(env('ALWAYS_EQUAL_FRIDGE_TO_STOCK')){
+            $validated['in_fridge'] = $validated['quantity'];
+        }
 
         // if has file, upload it convert it to webp 400x400
         if ($request->hasFile('image')) {
@@ -84,9 +84,11 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'nullable|string',
             'quantity' => 'nullable|integer|min:0',
-            'in_fridge' => 'nullable|integer|min:0',
+            'in_fridge' => 'nullable|integer|min:0|lte:quantity',
             'price' => 'nullable|numeric|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ], [
+            'in_fridge.lte' => 'The in fridge must be less than or equal to quantity.'
         ]);
         // return response()->json($request->all());
         // if has file, upload it convert it to webp 400x400
@@ -96,6 +98,15 @@ class ProductController extends Controller
         }
 
         $product = Product::findOrFail($id);
+
+        if(env('ALWAYS_EQUAL_FRIDGE_TO_STOCK')){
+            if($request->has('quantity')){
+                $validated['in_fridge'] = $validated['quantity'];
+            }else{
+                $validated['in_fridge'] = $product->quantity;
+            }
+        }
+
 
         // if has file, delete the old one
         if ($request->hasFile('image')) {
