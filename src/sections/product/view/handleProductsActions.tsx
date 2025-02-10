@@ -28,7 +28,7 @@ interface AddProductFormValues {
 }
 
 const handleAddProduct = async (fetchProducts: FetchProducts) => {
-  const { value } = await Swal.fire({
+  Swal.fire({
     title: 'Add product',
     html: `
         <label for="name" class="${tailwindLabel}">Name</label>
@@ -58,32 +58,38 @@ const handleAddProduct = async (fetchProducts: FetchProducts) => {
         in_fridge: parseInt((document.getElementById('in_fridge') as HTMLInputElement)?.value, 10),
         image: (document.getElementById('image') as HTMLInputElement)?.files?.[0] ?? null,
       };
-    },
-  });
-
-  if (value) {
-    // check if image size is less than 2MB
-
-    if (value.image && value.image.size > 2 * 1024 * 1024) {
-      return Swal.fire('Error', 'Image size must be less than 2MB', 'error');
     }
-    axios
-      .post(`${CONFIG.appURL}/api/products`, value, axiosHeaders)
-      .then(() => {
-        Swal.fire('Éxito', 'Product added successfully', 'success');
-        fetchProducts(); // Recargar productos
-      })
-      .catch((error) => Swal.fire('Error', error.data.response.message ? 'Unable to add product' : error.message, 'error'));
-  }
+  }).then((result) => {
+    if (result.value) {
+      const { name, price, quantity, in_fridge, image } = result.value;
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('price', price.toString());
+      formData.append('quantity', quantity.toString());
+      formData.append('in_fridge', in_fridge.toString());
+      formData.append('image', image as Blob);
+
+      axios
+        .post(`${CONFIG.appURL}/api/products`, formData, axiosHeaders)
+        .then(() => {
+          fetchProducts(); // Recargar productos
+          Swal.fire('Success', 'Product added successfully', 'success');
+        })
+        .catch((error) => {
+          console.error(error);
+          Swal.fire(
+            'Error',
+            error.response.data.message ? error.response.data.message : 'Unable to add product',
+            'error'
+          );
+        });
+    }
+  });
 };
 
 
-interface BuyProductParams {
-  productId: number;
-  fetchProducts: FetchProducts;
-}
 
-const handleBuyProduct = ({ productId, fetchProducts }: BuyProductParams) => {
+const handleBuyProduct = (productId:number|string, fetchProducts:FetchProducts) => {
   Swal.fire({
     title: '¿Quieres comprar este producto?',
     text: 'Se descontará de tu saldo.',
@@ -147,14 +153,30 @@ const handleEditProduct = (product: Product, fetchProducts: FetchProducts) => {
     },
   }).then((result) => {
     if (result.value) {
-      console.log(result.value);
+      const { name, price, quantity, in_fridge, image } = result.value;
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('price', price.toString());
+      formData.append('quantity', quantity.toString());
+      formData.append('in_fridge', in_fridge.toString());
+      if (image) {
+        formData.append('image', image as Blob);
+      }
+
       axios
-        .post(`${CONFIG.appURL}/api/products/update/${product.id}`, result.value, axiosHeaders)
+        .post(`${CONFIG.appURL}/api/products/update/${product.id}`, formData, axiosHeaders)
         .then(() => {
           fetchProducts(); // Recargar productos
           Swal.fire('Success', 'Product edited successfully', 'success');
         })
-        .catch((error) => Swal.fire('Error', error.data.response.message ? 'Unable to edit product' : error.message, 'error'));
+        .catch((error) => {
+          console.error(error);
+          Swal.fire(
+            'Error',
+            error.response.data.message ? error.response.data.message : 'Unable to edit product',
+            'error'
+          );
+        });
     }
   });
 };
