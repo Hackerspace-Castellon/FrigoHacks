@@ -93,7 +93,15 @@ FrigoHacks esta compuesto de 3 cosas:
 - Modificar en el archivo `src/config-global` la variable `appUrl` con el URL de tu servidor
 - Instala las dependencias de node `npm install` (Puedes usar bun, yarn o cualquier otro gestor de paquetes)
 - Genera las paginas con `npm run build`
+- Copiar el contenido de la carpeta `dist` a la carpeta `public` de tu servidor con `cp -r dist/* public/`
 
+
+##### Compilar el codigo para Android o iOS
+- Para compilar el código usaremos capacitor
+- Init capacitor con `npx cap init`
+- Añadir la plataforma con `npx cap add android` o `npx cap add ios`
+- Preparar el código con `bun run build` y luego `npx cap sync`
+- Compilar el código con AndroidStudio `npx cap open android` o  XCode `npx cap open ios`
 
 # Pruebas
 - Para ejecutar el servidor en local, ejecuta `php -S 0.0.0.0:8000 -t public/` desde la carpeta raíz de la aplicación
