@@ -1,3 +1,4 @@
+import { useSanctum } from 'react-sanctum';
 import type { Theme, SxProps, Breakpoint } from '@mui/material/styles';
 
 import { useEffect, useState } from 'react';
@@ -24,7 +25,6 @@ import { HeaderSection } from '../core/header-section';
 import { AccountPopover } from '../components/account-popover';
 import { LanguagePopover } from '../components/language-popover';
 import { NotificationsPopover } from '../components/notifications-popover';
-import { useSanctum } from 'react-sanctum';
 
 
 

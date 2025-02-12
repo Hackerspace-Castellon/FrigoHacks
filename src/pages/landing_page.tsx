@@ -70,7 +70,7 @@ export default function Page() {
             asoociation (or more).
           </Typography>
           <Box mt={3}>
-            <Button variant="contained" color="secondary" size="large" href='/login' >
+            <Button variant="contained" color="secondary" size="large" href="/login">
               Start Now
             </Button>
           </Box>
@@ -137,7 +137,8 @@ export default function Page() {
                     Made for HackerSpace Castellon and other HackerSpaces
                   </Typography>
                   <Typography variant="body1">
-                    This project was made to help  the community of hackerspaces over the world. <br />
+                    This project was made to help the community of hackerspaces over the world.{' '}
+                    <br />
                     <Button
                       variant="contained"
                       color="primary"
@@ -160,7 +161,7 @@ export default function Page() {
                       size="small"
                       href="https://teodin.com"
                     >
-                      Visit Teo's website
+                      Visit Teo&apos;s website
                     </Button>
                   </Typography>
                 </Paper>
@@ -168,9 +169,7 @@ export default function Page() {
               <Grid item md={4} sm={6} xs={12}>
                 <Paper sx={{ p: 3 }}>
                   <Typography variant="h6">Si</Typography>
-                  <Typography variant="body1">
-                    Means yes in Spain.
-                  </Typography>
+                  <Typography variant="body1">Means yes in Spain.</Typography>
                 </Paper>
               </Grid>
             </Grid>
@@ -180,7 +179,11 @@ export default function Page() {
         {/* Footer */}
         <Box sx={{ py: 4, textAlign: 'center', backgroundColor: '#222', color: 'white' }}>
           <Typography variant="body1">
-            © {new Date().getFullYear()} Frigohacks. Made for HackerSpace Castellon, Spain. Developed by <a href="https://teodin.com" className='underline text-blue-400 ' >TeoDev</a>
+            © {new Date().getFullYear()} Frigohacks. Made for HackerSpace Castellon, Spain.
+            Developed by{' '}
+            <a href="https://teodin.com" className="underline text-blue-400 ">
+              TeoDev
+            </a>
           </Typography>
         </Box>
       </SimpleLayout>

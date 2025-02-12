@@ -1,3 +1,4 @@
+import { useSanctum } from 'react-sanctum';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 
@@ -13,7 +14,6 @@ import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
 import { AnalyticsTrafficBySite } from '../analytics-traffic-by-site';
 import { AnalyticsCurrentSubject } from '../analytics-current-subject';
 import { AnalyticsConversionRates } from '../analytics-conversion-rates';
-import { useSanctum } from 'react-sanctum';
 
 // ----------------------------------------------------------------------
 

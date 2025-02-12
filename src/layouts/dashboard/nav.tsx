@@ -122,7 +122,7 @@ export function NavContent({ data, slots, workspaces, sx }: NavContentProps) {
       <Logo />
 
       {slots?.topArea}
-      <div className='mt-12' ></div>
+      <div className='mt-12' />
       {/* <WorkspacesPopover data={workspaces} sx={{ my: 2 }} /> */}
 
       <Scrollbar fillContent>

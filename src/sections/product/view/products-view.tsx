@@ -1,10 +1,18 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { Box, Grid, Typography, Card, CardMedia, CardContent, Button } from '@mui/material';
+import {
+  Box,
+  Grid,
+  Typography,
+  Card,
+  CardMedia,
+  CardContent,
+  Button,
+  CircularProgress,
+} from '@mui/material';
 
 import { DashboardContent } from 'src/layouts/dashboard';
-import { handleAddProduct, handleBuyProduct, handleEditProduct } from './handleProductsActions';
 import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
 import EditIcon from '@mui/icons-material/Edit';
@@ -12,7 +20,7 @@ import { CONFIG } from 'src/config-global';
 import { useSanctum } from 'react-sanctum';
 import { useRouter } from 'src/routes/hooks';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { CircularProgress } from '@mui/material';
+import { handleAddProduct, handleBuyProduct, handleEditProduct } from './handleProductsActions';
 
 interface User {
   role_id: number;

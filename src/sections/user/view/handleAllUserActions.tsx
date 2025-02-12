@@ -48,16 +48,14 @@ const handleEditUser = (user: User, setUsers: React.Dispatch<React.SetStateActio
         customClass: {
             confirmButton: 'btn btn-primary',
         },
-        preConfirm: (): (string | number)[] => {
-            return [
-                (document.getElementById('name') as HTMLInputElement).value,
-                (document.getElementById('email') as HTMLInputElement).value,
-                parseFloat((document.getElementById('balance') as HTMLInputElement).value),
-                parseInt((document.getElementById('role_id') as HTMLSelectElement).value, 10),
-                (document.getElementById('uuid') as HTMLInputElement).value,
-                (document.getElementById('pin_code') as HTMLInputElement).value.toUpperCase(),
-            ];
-        },
+        preConfirm: (): (string | number)[] => [
+            (document.getElementById('name') as HTMLInputElement).value,
+            (document.getElementById('email') as HTMLInputElement).value,
+            parseFloat((document.getElementById('balance') as HTMLInputElement).value),
+            parseInt((document.getElementById('role_id') as HTMLSelectElement).value, 10),
+            (document.getElementById('uuid') as HTMLInputElement).value,
+            (document.getElementById('pin_code') as HTMLInputElement).value.toUpperCase(),
+        ],
     }).then((result) => {
         if (result.isConfirmed) {
             const [name, email, balance, role_id, uuid, pin_code] = result.value as [string, string, number, number, string, string];

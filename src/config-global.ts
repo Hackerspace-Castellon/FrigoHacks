@@ -11,7 +11,7 @@ export type ConfigValue = {
 // ----------------------------------------------------------------------
 
 export const CONFIG: ConfigValue = {
-  appName: 'Minimal UI',
+  appName: 'FrigoHacks',
   appURL: 'http://localhost:8000',
   appVersion: packageJson.version,
 };

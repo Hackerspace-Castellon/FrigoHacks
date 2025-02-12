@@ -17,14 +17,30 @@ import {
 import { DashboardContent } from 'src/layouts/dashboard';
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
-import { TableNoData } from '../table-no-data';
 import { CONFIG } from 'src/config-global';
+import { TableNoData } from '../table-no-data';
 import { handleDeleteUser, handleEditUser } from './handleAllUserActions';
 
 
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  balance: number;
+  role_id: number;
+  uuid: string;
+  pin_code: string;
+}
+
+interface SortOrder {
+  asc: 'asc';
+  desc: 'desc';
+}
+
+
 export function AllUserView() {
-  const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [filterName, setFilterName] = useState('');
   const [orderBy, setOrderBy] = useState('name');
   const [order, setOrder] = useState('asc');
@@ -56,12 +72,15 @@ export function AllUserView() {
     setFilteredUsers(filtered);
   }, [filterName, users]);
 
-  const handleSort = (field) => {
+  
+  type SortableField = keyof Pick<User, 'name' | 'email' | 'balance' | 'role_id' | 'uuid' | 'pin_code'>;
+
+  const handleSort = (field: SortableField): void => {
     const isAsc = orderBy === field && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(field);
 
-    const sortedUsers = [...filteredUsers].sort((a, b) => {
+    const sortedUsers = [...filteredUsers].sort((a: User, b: User) => {
       if (a[field] < b[field]) return isAsc ? -1 : 1;
       if (a[field] > b[field]) return isAsc ? 1 : -1;
       return 0;
@@ -104,10 +123,10 @@ export function AllUserView() {
             <Table sx={{ minWidth: 800 }}>
               <TableHead>
                 <TableRow>
-                  {['name', 'email', 'balance', 'role', 'uuid', 'Pin Code'].map((field) => (
+                  {['name', 'email', 'balance', 'role_id', 'uuid', 'pin_code'].map((field) => (
                     <TableCell
                       key={field}
-                      onClick={() => handleSort(field)}
+                      onClick={() => handleSort(field as SortableField)}
                       sx={{ cursor: 'pointer' }}
                     >
                       {field.charAt(0).toUpperCase() + field.slice(1)}
@@ -138,7 +157,7 @@ export function AllUserView() {
                     </TableRow>
                   ))}
 
-                {filteredUsers.length === 0 && <TableNoData />}
+                {filteredUsers.length === 0 && <TableNoData searchQuery={filterName} />}
               </TableBody>
             </Table>
           </TableContainer>

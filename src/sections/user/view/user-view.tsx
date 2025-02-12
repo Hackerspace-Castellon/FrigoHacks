@@ -46,7 +46,7 @@ export function UserView() {
       .catch(() => setPurchases([]));
   }, []);
 
-  const handleBalanceChange = (type: 'add' | 'remove', user) => {
+  const handleBalanceChange = (type: 'add' | 'remove') => {
     Swal.fire({
       title: `How much do you want to ${type === 'add' ? 'add' : 'withdraw'}?`,
       html: `
@@ -62,9 +62,9 @@ export function UserView() {
       cancelButtonText: 'Cancel',
       didOpen: () => {
         const input = document.getElementById('swal-input') as HTMLInputElement;
-        document.getElementById('btn-1')?.addEventListener('click', () => (input.value = '1'));
-        document.getElementById('btn-2')?.addEventListener('click', () => (input.value = '2'));
-        document.getElementById('btn-5')?.addEventListener('click', () => (input.value = '5'));
+        document.getElementById('btn-1')?.addEventListener('click', () => { input.value = '1'; });
+        document.getElementById('btn-2')?.addEventListener('click', () => { input.value = '2'; });
+        document.getElementById('btn-5')?.addEventListener('click', () => { input.value = '5'; });
       },
       preConfirm: () => {
         const inputValue = (document.getElementById('swal-input') as HTMLInputElement)?.value;
@@ -129,14 +129,14 @@ export function UserView() {
           <Button
             variant="contained"
             color="success"
-            onClick={() => handleBalanceChange('add', user)}
+            onClick={() => handleBalanceChange('add')}
           >
             Add money
           </Button>
           <Button
             variant="contained"
             color="error"
-            onClick={() => handleBalanceChange('remove', user)}
+            onClick={() => handleBalanceChange('remove')}
           >
             Withdraw money
           </Button>
