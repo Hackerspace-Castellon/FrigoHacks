@@ -9,6 +9,10 @@ import tailwindcss from '@tailwindcss/vite'
 const PORT = 3039;
 
 export default defineConfig({
+  build: {
+    outDir: 'public/dist',
+    emptyOutDir: true,
+  },
   plugins: [
     react(),
     tailwindcss(),
